@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+        visualize: "true"
+    spec:
+      containers:
+      - name: hello-world-pod
+        image: tykola/hello-spring:dev
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENV_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              name: dev-properties
+              key: env.prefix

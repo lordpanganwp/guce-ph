@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: argocd
+  template:
+    metadata:
+      labels:
+        app: argocd
+        visualize: "true"
+    spec:
+      containers:
+      - name: argocd-pod
+        image: tykola/hello-spring:argocd
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENV_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              name: argocd-properties
+              key: env.prefix
